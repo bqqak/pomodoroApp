@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+#functionality {
+    background-color: rgb(186, 73, 73); 
+    transition: background-color 0.3s ease;
+}
+
+#functionality.break {
+    background-color: rgb(76, 145, 149); 
+}
