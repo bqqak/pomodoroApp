@@ -4,7 +4,7 @@ import CountingSessions from "./CountingSessions";
 
 function MainFunctionality({ onBreakChange }) {
   const [time, setTime] = useState(
-    Number(localStorage.getItem("time")) || 0.2 * 60
+    Number(localStorage.getItem("time")) || 50 * 60
   );
   const [isRunning, setIsRunning] = useState(
     localStorage.getItem("isRunning") === "true"
@@ -19,8 +19,8 @@ function MainFunctionality({ onBreakChange }) {
   )
   const intervalRef = useRef(null);
 
-  const workTime = 0.2 * 60;
-  const breakTime = 0.1 * 60;
+  const workTime = 50 * 60;
+  const breakTime = 10 * 60;
 
   useEffect(() => {
     if (onBreakChange) {
