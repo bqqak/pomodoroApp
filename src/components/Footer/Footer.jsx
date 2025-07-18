@@ -21,7 +21,7 @@ function Footer() {
     
       <p className="pt-10">
         <ul className="list-disc text-xl "><span className="text-2xl font-bold"> Free Features </span>
-            <li className="pt-2">25-minute focus sessions</li>
+            <li className="pt-2">50-minute focus sessions</li>
             <li className="pt-2">Short breaks (5 minutes)</li>
             <li className="pt-2">Customizable timer durations</li>
         </ul>

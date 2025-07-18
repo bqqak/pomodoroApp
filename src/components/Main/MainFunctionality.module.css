@@ -3,6 +3,9 @@
   padding: 10px 50px;
   font-size: 1.5rem;
 }
+.btn:hover{
+  background-color: rgb(180, 180, 180);
+}
 
 .secondWindow {
   background-color: rgba(255, 255, 255, 0.1);
@@ -18,4 +21,16 @@
 
 .secondWindow.break {
   background-color: rgb(76, 145, 149);
+}
+
+.btnSessions {
+    background-color: white;
+    border: 2px solid white;
+    border-radius: 400px;
+    margin-left: 20px;
+    padding: 15px
+}
+
+.btnSessions:hover {
+  background-color: rgb(180, 180, 180);
 }

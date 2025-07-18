@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 import styles from "./MainFunctionality.module.css";
+import CountingSessions from "./CountingSessions";
 
 function MainFunctionality({ onBreakChange }) {
   const [time, setTime] = useState(
-    Number(localStorage.getItem("time")) || 25 * 60
+    Number(localStorage.getItem("time")) || 0.2 * 60
   );
   const [isRunning, setIsRunning] = useState(
     localStorage.getItem("isRunning") === "true"
@@ -13,10 +14,13 @@ function MainFunctionality({ onBreakChange }) {
     localStorage.getItem("isBreak") === "true"
   );
 
+  const [count, setCount] = useState(
+    Number(localStorage.getItem('countSessions')) || 0
+  )
   const intervalRef = useRef(null);
 
-  const workTime = 25 * 60;
-  const breakTime = 5 * 60;
+  const workTime = 0.2 * 60;
+  const breakTime = 0.1 * 60;
 
   useEffect(() => {
     if (onBreakChange) {
@@ -38,6 +42,7 @@ function MainFunctionality({ onBreakChange }) {
             } else {
               setIsBreak(true);
               setTime(breakTime);
+              
             }
             return 0;
           }
@@ -51,7 +56,7 @@ function MainFunctionality({ onBreakChange }) {
   }
 
   useEffect(() => {
-    if (isRunning && time > 0) {
+    if (isRunning) {
       intervalRef.current = setInterval(() => {
         setTime((prevTime) => {
           if (prevTime <= 1) {
@@ -63,6 +68,7 @@ function MainFunctionality({ onBreakChange }) {
             } else {
               setIsBreak(true);
               setTime(breakTime);
+              setCount(count + 1); 
             }
             return 0;
           }
@@ -70,21 +76,19 @@ function MainFunctionality({ onBreakChange }) {
         });
       }, 1000);
     }
-  }, []);
-
-  useEffect(() => {
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
     };
-  }, []);
+  }, [isRunning, isBreak, workTime, breakTime]);
 
   useEffect(() => {
     localStorage.setItem("time", time);
     localStorage.setItem("isRunning", isRunning);
     localStorage.setItem("isBreak", isBreak);
-  }, [time, isRunning, isBreak]);
+    localStorage.setItem('countSessions', count)
+  }, [time, isRunning, isBreak, count]);
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -102,28 +106,35 @@ function MainFunctionality({ onBreakChange }) {
   };
 
   return (
-    <div className="flex justify-center items-center mt-20">
-      <div className={`${styles.secondWindow}`}>
-        <p className="text-9xl text-white">{formatTime(time)}</p>
-        <div className="flex gap-4 mt-8">
-          <button
-            className={`border bg-white ${styles.btn}`}
-            onClick={timerRun}
-          >
-            {isRunning ? "Pause" : "Start"}
-          </button>
-          <button
-            className={`border bg-white ${styles.btn}`}
-            onClick={resetTimer}
-          >
-            Reset
-          </button>
+    <>
+      <div className="flex justify-center items-center mt-20">
+        <div className={`${styles.secondWindow}`}>
+          <p className="text-9xl text-white">{formatTime(time)}</p>
+          <div className="flex gap-4 mt-8">
+            <button
+              className={`border bg-white ${styles.btn}`}
+              onClick={timerRun}
+            >
+              {isRunning ? "Pause" : "Start"}
+            </button>
+            <button
+              className={`border bg-white ${styles.btn}`}
+              onClick={resetTimer}
+            >
+              Reset
+            </button>
+          </div>
+          <p className="text-white text-xl mt-4">
+            {isBreak ? "Break Time" : "Work Time"}
+          </p>
         </div>
-        <p className="text-white text-xl mt-4">
-          {isBreak ? "Break Time" : "Work Time"}
-        </p>
+        
       </div>
-    </div>
+     <button onClick={() => setCount(0)} className={`text-3xl ${styles.btnSessions}`} >Clear Sessions</button>
+     <div className="w-auto h-0.5 bg-gray-400 mt-4 mb-4"></div>
+     {count == 0 ? <p className="text-2xl ml-5 text-amber-200">No Sessions</p> : <CountingSessions counter={localStorage.getItem('countSessions')} />}
+   
+    </>
   );
 }
 export default MainFunctionality;
